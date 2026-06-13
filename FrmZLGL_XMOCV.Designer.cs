@@ -32,37 +32,37 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmZLGL_XMOCV));
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
+            this.btnUpload = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.btnImport = new DevExpress.XtraEditors.SimpleButton();
             this.lkpUpProject = new DevExpress.XtraEditors.LookUpEdit();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.richBox = new System.Windows.Forms.RichTextBox();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tabIQC = new DevExpress.XtraTab.XtraTabPage();
-            this.tabZC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.tabZC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl2 = new DevExpress.XtraGrid.GridControl();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.tabIPQC = new DevExpress.XtraTab.XtraTabPage();
-            this.tabLL = new DevExpress.XtraTab.XtraTabPage();
-            this.tblOQC = new DevExpress.XtraTab.XtraTabPage();
-            this.tblORT = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl3 = new DevExpress.XtraGrid.GridControl();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.tabLL = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl4 = new DevExpress.XtraGrid.GridControl();
             this.gridView4 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.tblOQC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl5 = new DevExpress.XtraGrid.GridControl();
             this.gridView5 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.tblORT = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl6 = new DevExpress.XtraGrid.GridControl();
             this.gridView6 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.btnImport = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             this.splitContainerControl1.SuspendLayout();
@@ -74,21 +74,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tabIQC.SuspendLayout();
-            this.tabZC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            this.tabZC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
             this.tabIPQC.SuspendLayout();
-            this.tabLL.SuspendLayout();
-            this.tblOQC.SuspendLayout();
-            this.tblORT.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
+            this.tabLL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView4)).BeginInit();
+            this.tblOQC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).BeginInit();
+            this.tblORT.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView6)).BeginInit();
             this.SuspendLayout();
@@ -107,7 +107,7 @@
             this.barManager1.DockControls.Add(this.barDockControlRight);
             this.barManager1.Form = this;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
-            this.barButtonItem1});
+            this.btnUpload});
             this.barManager1.MaxItemId = 1;
             // 
             // bar1
@@ -117,8 +117,17 @@
             this.bar1.DockRow = 0;
             this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnUpload)});
             this.bar1.Text = "Tools";
+            // 
+            // btnUpload
+            // 
+            this.btnUpload.Caption = "发起上传";
+            this.btnUpload.Glyph = ((System.Drawing.Image)(resources.GetObject("btnUpload.Glyph")));
+            this.btnUpload.Id = 0;
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.btnUpload.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnUpload_ItemClick);
             // 
             // barDockControlTop
             // 
@@ -176,13 +185,15 @@
             this.panelControl1.Size = new System.Drawing.Size(1559, 125);
             this.panelControl1.TabIndex = 0;
             // 
-            // labelControl1
+            // btnImport
             // 
-            this.labelControl1.Location = new System.Drawing.Point(70, 50);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(126, 22);
-            this.labelControl1.TabIndex = 0;
-            this.labelControl1.Text = "导入项目选择：";
+            this.btnImport.Image = ((System.Drawing.Image)(resources.GetObject("btnImport.Image")));
+            this.btnImport.Location = new System.Drawing.Point(484, 39);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(123, 42);
+            this.btnImport.TabIndex = 2;
+            this.btnImport.Text = "导入Excel";
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
             // lkpUpProject
             // 
@@ -193,14 +204,15 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.lkpUpProject.Size = new System.Drawing.Size(205, 28);
             this.lkpUpProject.TabIndex = 1;
+            this.lkpUpProject.EditValueChanged += new System.EventHandler(this.lkpUpProject_EditValueChanged);
             // 
-            // barButtonItem1
+            // labelControl1
             // 
-            this.barButtonItem1.Caption = "发起上传";
-            this.barButtonItem1.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.Glyph")));
-            this.barButtonItem1.Id = 0;
-            this.barButtonItem1.Name = "barButtonItem1";
-            this.barButtonItem1.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.labelControl1.Location = new System.Drawing.Point(70, 50);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(126, 22);
+            this.labelControl1.TabIndex = 0;
+            this.labelControl1.Text = "导入项目选择：";
             // 
             // splitContainerControl2
             // 
@@ -250,13 +262,6 @@
             this.tabIQC.Size = new System.Drawing.Size(1199, 692);
             this.tabIQC.Text = "IQC数据";
             // 
-            // tabZC
-            // 
-            this.tabZC.Controls.Add(this.gridControl2);
-            this.tabZC.Name = "tabZC";
-            this.tabZC.Size = new System.Drawing.Size(1199, 692);
-            this.tabZC.Text = "制程参数数据";
-            // 
             // gridControl1
             // 
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -274,6 +279,13 @@
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsView.ShowGroupPanel = false;
+            // 
+            // tabZC
+            // 
+            this.tabZC.Controls.Add(this.gridControl2);
+            this.tabZC.Name = "tabZC";
+            this.tabZC.Size = new System.Drawing.Size(1199, 692);
+            this.tabZC.Text = "制程参数数据";
             // 
             // gridControl2
             // 
@@ -300,27 +312,6 @@
             this.tabIPQC.Size = new System.Drawing.Size(1199, 692);
             this.tabIPQC.Text = "IPQC数据";
             // 
-            // tabLL
-            // 
-            this.tabLL.Controls.Add(this.gridControl4);
-            this.tabLL.Name = "tabLL";
-            this.tabLL.Size = new System.Drawing.Size(1199, 692);
-            this.tabLL.Text = "良率数据";
-            // 
-            // tblOQC
-            // 
-            this.tblOQC.Controls.Add(this.gridControl5);
-            this.tblOQC.Name = "tblOQC";
-            this.tblOQC.Size = new System.Drawing.Size(1199, 692);
-            this.tblOQC.Text = "OQC数据";
-            // 
-            // tblORT
-            // 
-            this.tblORT.Controls.Add(this.gridControl6);
-            this.tblORT.Name = "tblORT";
-            this.tblORT.Size = new System.Drawing.Size(1199, 692);
-            this.tblORT.Text = "ORT数据";
-            // 
             // gridControl3
             // 
             this.gridControl3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -338,6 +329,13 @@
             this.gridView3.GridControl = this.gridControl3;
             this.gridView3.Name = "gridView3";
             this.gridView3.OptionsView.ShowGroupPanel = false;
+            // 
+            // tabLL
+            // 
+            this.tabLL.Controls.Add(this.gridControl4);
+            this.tabLL.Name = "tabLL";
+            this.tabLL.Size = new System.Drawing.Size(1199, 692);
+            this.tabLL.Text = "良率数据";
             // 
             // gridControl4
             // 
@@ -357,6 +355,13 @@
             this.gridView4.Name = "gridView4";
             this.gridView4.OptionsView.ShowGroupPanel = false;
             // 
+            // tblOQC
+            // 
+            this.tblOQC.Controls.Add(this.gridControl5);
+            this.tblOQC.Name = "tblOQC";
+            this.tblOQC.Size = new System.Drawing.Size(1199, 692);
+            this.tblOQC.Text = "OQC数据";
+            // 
             // gridControl5
             // 
             this.gridControl5.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -375,6 +380,13 @@
             this.gridView5.Name = "gridView5";
             this.gridView5.OptionsView.ShowGroupPanel = false;
             // 
+            // tblORT
+            // 
+            this.tblORT.Controls.Add(this.gridControl6);
+            this.tblORT.Name = "tblORT";
+            this.tblORT.Size = new System.Drawing.Size(1199, 692);
+            this.tblORT.Text = "ORT数据";
+            // 
             // gridControl6
             // 
             this.gridControl6.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -392,15 +404,6 @@
             this.gridView6.GridControl = this.gridControl6;
             this.gridView6.Name = "gridView6";
             this.gridView6.OptionsView.ShowGroupPanel = false;
-            // 
-            // btnImport
-            // 
-            this.btnImport.Image = ((System.Drawing.Image)(resources.GetObject("btnImport.Image")));
-            this.btnImport.Location = new System.Drawing.Point(484, 39);
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(123, 42);
-            this.btnImport.TabIndex = 2;
-            this.btnImport.Text = "导入Excel";
             // 
             // FrmZLGL_XMOCV
             // 
@@ -427,21 +430,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
             this.tabIQC.ResumeLayout(false);
-            this.tabZC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            this.tabZC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
             this.tabIPQC.ResumeLayout(false);
-            this.tabLL.ResumeLayout(false);
-            this.tblOQC.ResumeLayout(false);
-            this.tblORT.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
+            this.tabLL.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView4)).EndInit();
+            this.tblOQC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).EndInit();
+            this.tblORT.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView6)).EndInit();
             this.ResumeLayout(false);
@@ -460,7 +463,7 @@
         private DevExpress.XtraEditors.PanelControl panelControl1;
         private DevExpress.XtraEditors.LookUpEdit lkpUpProject;
         private DevExpress.XtraEditors.LabelControl labelControl1;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonItem btnUpload;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl2;
         private System.Windows.Forms.RichTextBox richBox;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
