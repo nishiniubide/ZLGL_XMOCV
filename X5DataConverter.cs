@@ -9,58 +9,80 @@ namespace ZLGL_XMOCV
 {
     public enum DataDimension
     {
-        Yield,      // 良率
-        Process,    // 制程参数
-        Oqc,        // OQC
-        Ort,        // ORT
-        Iqc,        // IQC
-        Ipqc        // IPQC
+        Yield,
+        Process,
+        Oqc,
+        Ort,
+        Iqc,
+        Ipqc
+    }
+
+    public class X5RequestPackage
+    {
+        public string FactoryCode { get; set; }      // 供应商代码
+        public int BusinessLineId { get; set; }      // 业务线，固定4
+        public int DataLines { get; set; }           // 数据条数（data数组长度）
+        public string PushTime { get; set; }         // 请求推送时间
+        public string BodyJson { get; set; }         // data序列化后的JSON字符串
     }
 
     public static class X5DataConverter
     {
         /// <summary>
-        /// 将DataTable转换为指定维度的实体列表
+        /// 从DataTable构建完整的X5请求包（含外层参数和body json）
         /// </summary>
-        public static List<object> ConvertToEntityList(DataTable dt, DataDimension dimension)
+        public static X5RequestPackage BuildRequestPackage(DataTable dt, DataDimension dimension)
         {
+            var package = new X5RequestPackage();
+
+            // 从第一行提取公共参数（所有行应相同）
+            if (dt.Rows.Count == 0) return null;
+
+            DataRow firstRow = dt.Rows[0];
+            package.FactoryCode = firstRow["供应商代码(必填)"]?.ToString() ?? firstRow["工厂编码(必填)"]?.ToString();
+            package.BusinessLineId = Convert.ToInt32(firstRow["业务线(必填)"] ?? "4");
+            package.PushTime = ConvertToDateTimeString(firstRow["请求推送的时间(必填)"] ?? firstRow["数据推送时间(必填)"]);
+
+            // 根据维度转换 data 列表
+            List<object> dataList;
             switch (dimension)
             {
                 case DataDimension.Yield:
-                    return ConvertToYieldList(dt).Cast<object>().ToList();
+                    dataList = ConvertToYieldDataList(dt).Cast<object>().ToList();
+                    break;
                 case DataDimension.Process:
-                    return ConvertToProcessList(dt).Cast<object>().ToList();
+                    dataList = ConvertToProcessDataList(dt).Cast<object>().ToList();
+                    break;
                 case DataDimension.Oqc:
-                    return ConvertToOqcList(dt).Cast<object>().ToList();
+                    dataList = ConvertToOqcDataList(dt).Cast<object>().ToList();
+                    break;
                 case DataDimension.Ort:
-                    return ConvertToOrtList(dt).Cast<object>().ToList();
+                    dataList = ConvertToOrtDataList(dt).Cast<object>().ToList();
+                    break;
                 case DataDimension.Iqc:
-                    return ConvertToIqcList(dt).Cast<object>().ToList();
+                    dataList = ConvertToIqcDataList(dt).Cast<object>().ToList();
+                    break;
                 case DataDimension.Ipqc:
-                    return ConvertToIpqcList(dt).Cast<object>().ToList();
+                    dataList = ConvertToIpqcDataList(dt).Cast<object>().ToList();
+                    break;
                 default:
                     throw new ArgumentException("不支持的维度");
             }
-        }
 
-        /// <summary>
-        /// 直接生成Body JSON字符串（供X5协议使用）
-        /// </summary>
-        public static string BuildBodyJson(DataTable dt, DataDimension dimension)
-        {
-            var list = ConvertToEntityList(dt, dimension);
-            return JsonConvert.SerializeObject(list, new JsonSerializerSettings
+            package.DataLines = dataList.Count;
+            package.BodyJson = JsonConvert.SerializeObject(dataList, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DateFormatString = "yyyy-MM-dd HH:mm:ss"
             });
+            return package;
         }
 
-        #region 各维度转换实现
+        #region 各维度转换（内层实体，不含外层公共字段）
 
-        private static List<YieldData> ConvertToYieldList(DataTable dt)
+        private static List<YieldData> ConvertToYieldDataList(DataTable dt)
         {
-            // 良率表：唯一键为“接口主键”，将多行不良明细合并到DefectList中
+            // 良率表：以“接口主键”分组，将多行不良合并到 DefectList
             var groups = dt.AsEnumerable().GroupBy(row => row["接口主键(必填)"].ToString());
             var result = new List<YieldData>();
 
@@ -69,11 +91,6 @@ namespace ZLGL_XMOCV
                 var firstRow = group.First();
                 var yield = new YieldData
                 {
-                    FactoryCode = firstRow["工厂编码(必填)"].ToString(),
-                    BusinessLineId = Convert.ToInt32(firstRow["业务线(必填)"]),
-                    SupplierType = Convert.ToInt32(firstRow["供应商类型(必填)"]),
-                    PushTime = ConvertToDateTimeString(firstRow["数据推送时间(必填)"]),
-                    DataLines = Convert.ToInt32(firstRow["总条目数(必填)"]),
                     KeyCode = firstRow["接口主键(必填)"].ToString(),
                     CheckType = firstRow["检验方式"] == DBNull.Value ? (int?)null : Convert.ToInt32(firstRow["检验方式"]),
                     MaterialType = firstRow["物料类型(必填)"].ToString(),
@@ -97,20 +114,18 @@ namespace ZLGL_XMOCV
                     DefectList = new List<YieldDefect>()
                 };
 
-                // 遍历组内所有行，收集不良明细
                 foreach (DataRow row in group)
                 {
                     if (row["不良类型"] != DBNull.Value || row["不良分类"] != DBNull.Value)
                     {
-                        var defect = new YieldDefect
+                        yield.DefectList.Add(new YieldDefect
                         {
                             YieldType = row["不良类型"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["不良类型"]),
                             InsCls = row["不良分类"].ToString(),
                             InsItm = row["不良详细描述"].ToString(),
                             QtyIns = row["检验数"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["检验数"]),
                             QtyDef = row["不良数"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["不良数"])
-                        };
-                        yield.DefectList.Add(defect);
+                        });
                     }
                 }
                 result.Add(yield);
@@ -118,16 +133,13 @@ namespace ZLGL_XMOCV
             return result;
         }
 
-        private static List<ProcessData> ConvertToProcessList(DataTable dt)
+        private static List<ProcessData> ConvertToProcessDataList(DataTable dt)
         {
             var list = new List<ProcessData>();
             foreach (DataRow row in dt.Rows)
             {
                 list.Add(new ProcessData
                 {
-                    RequestTime = ConvertToDateTimeString(row["请求推送的时间(必填)"]),
-                    FactoryCode = row["供应商代码(必填)"].ToString(),
-                    BusinessLineId = Convert.ToInt32(row["业务线(必填)"]),
                     MaterialType = row["物料类型(必填)"].ToString(),
                     SupplierModel = row["供应商型号(必填)"].ToString(),
                     ProductCode = row["物料代码(必填)"].ToString(),
@@ -148,9 +160,9 @@ namespace ZLGL_XMOCV
             return list;
         }
 
-        private static List<OqcData> ConvertToOqcList(DataTable dt)
+        private static List<OqcData> ConvertToOqcDataList(DataTable dt)
         {
-            // OQC表：唯一键组合（供应商代码+业务线+领域+型号+料号+工站+出货批次+检验日期）
+            // OQC 唯一键组合（供应商代码+业务线+领域+型号+料号+工站+出货批次+检验日期）
             var groups = dt.AsEnumerable().GroupBy(row =>
                 $"{row["供应商代码(必填)"]}_{row["业务线(必填)"]}_{row["领域(必填)"]}_{row["供应商型号(必填)"]}_{row["物料代码(必填)"]}_{row["工站(必填)"]}_{row["出货批次(必填)"]}_{Convert.ToDateTime(row["检验日期(必填)"]):yyyy-MM-dd}");
             var result = new List<OqcData>();
@@ -160,9 +172,6 @@ namespace ZLGL_XMOCV
                 var firstRow = group.First();
                 var oqc = new OqcData
                 {
-                    RequestTime = ConvertToDateTimeString(firstRow["请求推送的时间(必填)"]),
-                    FactoryCode = firstRow["供应商代码(必填)"].ToString(),
-                    BusinessLineId = Convert.ToInt32(firstRow["业务线(必填)"]),
                     ProductCode = firstRow["物料代码(必填)"].ToString(),
                     FieldType = firstRow["领域(必填)"].ToString(),
                     SupplierModel = firstRow["供应商型号(必填)"].ToString(),
@@ -193,16 +202,13 @@ namespace ZLGL_XMOCV
             return result;
         }
 
-        private static List<OrtData> ConvertToOrtList(DataTable dt)
+        private static List<OrtData> ConvertToOrtDataList(DataTable dt)
         {
             var list = new List<OrtData>();
             foreach (DataRow row in dt.Rows)
             {
                 list.Add(new OrtData
                 {
-                    RequestTime = ConvertToDateTimeString(row["请求推送的时间(必填)"]),
-                    FactoryCode = row["供应商代码(必填)"].ToString(),
-                    BusinessLineId = Convert.ToInt32(row["业务线(必填)"]),
                     FieldType = row["领域(必填)"].ToString(),
                     SupplierModel = row["供应商型号(必填)"].ToString(),
                     ProductCode = row["物料代码(必填)"].ToString(),
@@ -222,16 +228,13 @@ namespace ZLGL_XMOCV
             return list;
         }
 
-        private static List<IqcData> ConvertToIqcList(DataTable dt)
+        private static List<IqcData> ConvertToIqcDataList(DataTable dt)
         {
             var list = new List<IqcData>();
             foreach (DataRow row in dt.Rows)
             {
                 list.Add(new IqcData
                 {
-                    RequestTime = ConvertToDateTimeString(row["请求推送的时间(必填)"]),
-                    FactoryCode = row["供应商代码(必填)"].ToString(),
-                    BusinessLineId = Convert.ToInt32(row["业务线(必填)"]),
                     InspectNo = row["检验单号(必填)"].ToString(),
                     MaterialType = row["物料类型(必填)"].ToString(),
                     SupplierModel = row["供应商型号(必填)"].ToString(),
@@ -256,16 +259,13 @@ namespace ZLGL_XMOCV
             return list;
         }
 
-        private static List<IpqcData> ConvertToIpqcList(DataTable dt)
+        private static List<IpqcData> ConvertToIpqcDataList(DataTable dt)
         {
             var list = new List<IpqcData>();
             foreach (DataRow row in dt.Rows)
             {
                 list.Add(new IpqcData
                 {
-                    RequestTime = ConvertToDateTimeString(row["请求推送的时间(必填)"]),
-                    FactoryCode = row["供应商代码(必填)"].ToString(),
-                    BusinessLineId = Convert.ToInt32(row["业务线(必填)"]),
                     InspectNo = row["检验单号(必填)"].ToString(),
                     MaterialType = row["物料类型(必填)"].ToString(),
                     SupplierModel = row["供应商型号(必填)"].ToString(),
