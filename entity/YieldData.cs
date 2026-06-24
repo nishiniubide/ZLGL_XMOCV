@@ -3,24 +3,6 @@ using System.Collections.Generic;
 
 namespace ZLGL_XMOCV.entity
 {
-    public class YieldDefect
-    {
-        [JsonProperty("yield_type")]
-        public int? YieldType { get; set; }
-
-        [JsonProperty("inscls")]
-        public string InsCls { get; set; }
-
-        [JsonProperty("insitm")]
-        public string InsItm { get; set; }
-
-        [JsonProperty("qtyins")]
-        public int? QtyIns { get; set; }
-
-        [JsonProperty("qtydef")]
-        public int? QtyDef { get; set; }
-    }
-
     public class YieldData
     {
         [JsonProperty("factory_code")]
@@ -98,7 +80,19 @@ namespace ZLGL_XMOCV.entity
         [JsonProperty("qty_scrap")]
         public int QtyScrap { get; set; }
 
-        [JsonProperty("defect_list")]
-        public List<YieldDefect> DefectList { get; set; }
+        [JsonProperty("yield_type")]
+        public int? YieldType { get; set; }
+
+        [JsonProperty("inscls")]
+        public string InsCls { get; set; }
+
+        [JsonProperty("insitm")]
+        public string InsItm { get; set; }
+
+        [JsonProperty("qtyins")]
+        public int? QtyIns { get; set; }
+
+        [JsonProperty("qtydef")]
+        public int? QtyDef { get; set; }
     }
 }

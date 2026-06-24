@@ -74,7 +74,7 @@ namespace ZLGL_XMOCV
 
             // 3. Base64 编码 + URL 编码
             string base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(x5Json));
-            string data = HttpUtility.UrlEncode(base64, Encoding.UTF8);
+            string data = DXHttpUtility.UrlEncode(base64, Encoding.UTF8);
 
             // 4. 组装 POST 数据
             string postData = "data=" + data;

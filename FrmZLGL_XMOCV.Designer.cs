@@ -45,22 +45,22 @@
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.richBox = new System.Windows.Forms.RichTextBox();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
-            this.tabIQC = new DevExpress.XtraTab.XtraTabPage();
+            this.TabIQC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.tabZC = new DevExpress.XtraTab.XtraTabPage();
+            this.TabZC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl2 = new DevExpress.XtraGrid.GridControl();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.tabIPQC = new DevExpress.XtraTab.XtraTabPage();
+            this.TabIPQC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl3 = new DevExpress.XtraGrid.GridControl();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.tabLL = new DevExpress.XtraTab.XtraTabPage();
+            this.TabLL = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl4 = new DevExpress.XtraGrid.GridControl();
             this.gridView4 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.tblOQC = new DevExpress.XtraTab.XtraTabPage();
+            this.TabOQC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl5 = new DevExpress.XtraGrid.GridControl();
             this.gridView5 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.tblORT = new DevExpress.XtraTab.XtraTabPage();
+            this.TabORT = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl6 = new DevExpress.XtraGrid.GridControl();
             this.gridView6 = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
@@ -73,22 +73,22 @@
             this.splitContainerControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
-            this.tabIQC.SuspendLayout();
+            this.TabIQC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
-            this.tabZC.SuspendLayout();
+            this.TabZC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
-            this.tabIPQC.SuspendLayout();
+            this.TabIPQC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
-            this.tabLL.SuspendLayout();
+            this.TabLL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView4)).BeginInit();
-            this.tblOQC.SuspendLayout();
+            this.TabOQC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).BeginInit();
-            this.tblORT.SuspendLayout();
+            this.TabORT.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView6)).BeginInit();
             this.SuspendLayout();
@@ -244,23 +244,23 @@
             this.xtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
-            this.xtraTabControl1.SelectedTabPage = this.tabIQC;
+            this.xtraTabControl1.SelectedTabPage = this.TabIQC;
             this.xtraTabControl1.Size = new System.Drawing.Size(1202, 726);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
-            this.tabIQC,
-            this.tabZC,
-            this.tabIPQC,
-            this.tabLL,
-            this.tblOQC,
-            this.tblORT});
+            this.TabIQC,
+            this.TabZC,
+            this.TabIPQC,
+            this.TabLL,
+            this.TabOQC,
+            this.TabORT});
             // 
-            // tabIQC
+            // TabIQC
             // 
-            this.tabIQC.Controls.Add(this.gridControl1);
-            this.tabIQC.Name = "tabIQC";
-            this.tabIQC.Size = new System.Drawing.Size(1199, 692);
-            this.tabIQC.Text = "IQC数据";
+            this.TabIQC.Controls.Add(this.gridControl1);
+            this.TabIQC.Name = "TabIQC";
+            this.TabIQC.Size = new System.Drawing.Size(1199, 692);
+            this.TabIQC.Text = "IQC数据";
             // 
             // gridControl1
             // 
@@ -280,12 +280,12 @@
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsView.ShowGroupPanel = false;
             // 
-            // tabZC
+            // TabZC
             // 
-            this.tabZC.Controls.Add(this.gridControl2);
-            this.tabZC.Name = "tabZC";
-            this.tabZC.Size = new System.Drawing.Size(1199, 692);
-            this.tabZC.Text = "制程参数数据";
+            this.TabZC.Controls.Add(this.gridControl2);
+            this.TabZC.Name = "TabZC";
+            this.TabZC.Size = new System.Drawing.Size(1199, 692);
+            this.TabZC.Text = "制程参数数据";
             // 
             // gridControl2
             // 
@@ -305,12 +305,12 @@
             this.gridView2.Name = "gridView2";
             this.gridView2.OptionsView.ShowGroupPanel = false;
             // 
-            // tabIPQC
+            // TabIPQC
             // 
-            this.tabIPQC.Controls.Add(this.gridControl3);
-            this.tabIPQC.Name = "tabIPQC";
-            this.tabIPQC.Size = new System.Drawing.Size(1199, 692);
-            this.tabIPQC.Text = "IPQC数据";
+            this.TabIPQC.Controls.Add(this.gridControl3);
+            this.TabIPQC.Name = "TabIPQC";
+            this.TabIPQC.Size = new System.Drawing.Size(1199, 692);
+            this.TabIPQC.Text = "IPQC数据";
             // 
             // gridControl3
             // 
@@ -330,12 +330,12 @@
             this.gridView3.Name = "gridView3";
             this.gridView3.OptionsView.ShowGroupPanel = false;
             // 
-            // tabLL
+            // TabLL
             // 
-            this.tabLL.Controls.Add(this.gridControl4);
-            this.tabLL.Name = "tabLL";
-            this.tabLL.Size = new System.Drawing.Size(1199, 692);
-            this.tabLL.Text = "良率数据";
+            this.TabLL.Controls.Add(this.gridControl4);
+            this.TabLL.Name = "TabLL";
+            this.TabLL.Size = new System.Drawing.Size(1199, 692);
+            this.TabLL.Text = "良率数据";
             // 
             // gridControl4
             // 
@@ -355,12 +355,12 @@
             this.gridView4.Name = "gridView4";
             this.gridView4.OptionsView.ShowGroupPanel = false;
             // 
-            // tblOQC
+            // TabOQC
             // 
-            this.tblOQC.Controls.Add(this.gridControl5);
-            this.tblOQC.Name = "tblOQC";
-            this.tblOQC.Size = new System.Drawing.Size(1199, 692);
-            this.tblOQC.Text = "OQC数据";
+            this.TabOQC.Controls.Add(this.gridControl5);
+            this.TabOQC.Name = "TabOQC";
+            this.TabOQC.Size = new System.Drawing.Size(1199, 692);
+            this.TabOQC.Text = "OQC数据";
             // 
             // gridControl5
             // 
@@ -380,12 +380,12 @@
             this.gridView5.Name = "gridView5";
             this.gridView5.OptionsView.ShowGroupPanel = false;
             // 
-            // tblORT
+            // TabORT
             // 
-            this.tblORT.Controls.Add(this.gridControl6);
-            this.tblORT.Name = "tblORT";
-            this.tblORT.Size = new System.Drawing.Size(1199, 692);
-            this.tblORT.Text = "ORT数据";
+            this.TabORT.Controls.Add(this.gridControl6);
+            this.TabORT.Name = "TabORT";
+            this.TabORT.Size = new System.Drawing.Size(1199, 692);
+            this.TabORT.Text = "ORT数据";
             // 
             // gridControl6
             // 
@@ -429,22 +429,22 @@
             this.splitContainerControl2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
-            this.tabIQC.ResumeLayout(false);
+            this.TabIQC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
-            this.tabZC.ResumeLayout(false);
+            this.TabZC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
-            this.tabIPQC.ResumeLayout(false);
+            this.TabIPQC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
-            this.tabLL.ResumeLayout(false);
+            this.TabLL.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView4)).EndInit();
-            this.tblOQC.ResumeLayout(false);
+            this.TabOQC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).EndInit();
-            this.tblORT.ResumeLayout(false);
+            this.TabORT.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView6)).EndInit();
             this.ResumeLayout(false);
@@ -467,16 +467,16 @@
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl2;
         private System.Windows.Forms.RichTextBox richBox;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
-        private DevExpress.XtraTab.XtraTabPage tabIQC;
-        private DevExpress.XtraTab.XtraTabPage tabZC;
+        private DevExpress.XtraTab.XtraTabPage TabIQC;
+        private DevExpress.XtraTab.XtraTabPage TabZC;
         private DevExpress.XtraGrid.GridControl gridControl1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private DevExpress.XtraGrid.GridControl gridControl2;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
-        private DevExpress.XtraTab.XtraTabPage tabIPQC;
-        private DevExpress.XtraTab.XtraTabPage tabLL;
-        private DevExpress.XtraTab.XtraTabPage tblOQC;
-        private DevExpress.XtraTab.XtraTabPage tblORT;
+        private DevExpress.XtraTab.XtraTabPage TabIPQC;
+        private DevExpress.XtraTab.XtraTabPage TabLL;
+        private DevExpress.XtraTab.XtraTabPage TabOQC;
+        private DevExpress.XtraTab.XtraTabPage TabORT;
         private DevExpress.XtraGrid.GridControl gridControl3;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView3;
         private DevExpress.XtraGrid.GridControl gridControl4;
