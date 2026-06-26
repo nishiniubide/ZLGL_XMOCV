@@ -63,14 +63,12 @@ namespace ZLGL_XMOCV
                     throw new ArgumentException("不支持的维度");
             }
 
-            var bodyObject = new { data = dataList };
-
-            package.BodyJson = JsonConvert.SerializeObject(bodyObject, new JsonSerializerSettings
+            package.DataLines = dataList.Count;
+            package.BodyJson = JsonConvert.SerializeObject(dataList, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DateFormatString = "yyyy-MM-dd HH:mm:ss"
             });
-
             return package;
         }
 
