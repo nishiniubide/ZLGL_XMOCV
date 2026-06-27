@@ -380,14 +380,28 @@ namespace ZLGL_XMOCV
             }
 
             // 调用 X5Client 发送请求
-            X5ResponseMessage response = X5Client.PostData(userName, password, url, appId, appKey, package.BodyJson);
-            if (response.Header.Code == "200")
+            object result = X5Client.PostData(userName, password, url, appId, appKey, package.BodyJson);
+
+            // 情况1：成功解析为 X5ResponseMessage 对象
+            if (result is X5ResponseMessage response)
             {
-                ShowMessage($"上传成功！{response.Header.Desc}", true);
+                if (response.Header.Code == "200")
+                {
+                    ShowMessage($"上传成功！{response.Header.Desc}", true);
+                }
+                else
+                {
+                    ShowMessage($"上传失败：{response.Header.Code} - {response.Header.Desc}", false);
+                }
             }
-            else
+            // 情况2：返回的是字符串（说明解析失败，服务器返回了 HTML 或报错信息）
+            else if (result is string errorContent)
             {
-                ShowMessage($"上传失败：{response.Header.Code} - {response.Header.Desc}", false);
+                ShowMessage($"请求失败或返回格式异常：", false);
+
+                // 可以将错误内容打印出来，或者弹窗显示
+                // 如果是 HTML，通常很长，建议只显示关键部分或写入日志
+                Msg.ShowError($"服务器返回内容：\n{errorContent}");
             }
         }
 

@@ -57,7 +57,7 @@ namespace ZLGL_XMOCV
         /// <param name="appKey">应用密钥</param>
         /// <param name="bodyJson">业务数据 JSON 字符串（即 data 数组序列化后的结果）</param>
         /// <returns>响应报文对象</returns>
-        public static X5ResponseMessage PostData(string userName, string password, string url, string appId, string appKey, string bodyJson)
+        public static object PostData(string userName, string password, string url, string appId, string appKey, string bodyJson)
         {
             // 1. 计算签名：MD5(appid + body + appkey)
             string signRaw = appId + bodyJson + appKey;
@@ -71,7 +71,7 @@ namespace ZLGL_XMOCV
             };
             string x5Json = JsonConvert.SerializeObject(x5Request);
 
-            // 3. Base64 编码 + URL 编码 (使用原生的 HttpUtility 替代 DXHttpUtility)
+            // 3. Base64 编码 + URL 编码
             string base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(x5Json));
             string data = DXHttpUtility.UrlEncode(base64, Encoding.UTF8);
 
@@ -96,7 +96,7 @@ namespace ZLGL_XMOCV
                 reqStream.Write(bytes, 0, bytes.Length);
             }
 
-            // 6. 读取响应 (增加空引用保护)
+            // 6. 读取响应
             string responseText;
             try
             {
@@ -108,19 +108,42 @@ namespace ZLGL_XMOCV
             }
             catch (WebException ex)
             {
-                // ✅ 关键修改：如果 ex.Response 为 null（如超时、DNS错误），避免抛出 NullReferenceException
                 if (ex.Response == null)
                 {
-                    throw new Exception($"网络请求失败，无响应返回: {ex.Message}", ex);
+                    // 网络层完全失败，返回异常信息字符串
+                    return $"网络请求异常: {ex.Message}";
                 }
+                // 即使 HTTP 状态码错误（如 500, 403），也读取响应内容
                 using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream(), Encoding.UTF8))
                 {
                     responseText = reader.ReadToEnd();
                 }
             }
 
-            // 7. 反序列化响应
-            return JsonConvert.DeserializeObject<X5ResponseMessage>(responseText);
+            try
+            {
+                // 如果响应内容为空
+                if (string.IsNullOrWhiteSpace(responseText))
+                {
+                    return "服务器返回内容为空";
+                }
+
+                // 尝试反序列化
+                var result = JsonConvert.DeserializeObject<X5ResponseMessage>(responseText);
+
+                // 如果反序列化成功，返回对象
+                return result;
+            }
+            catch (JsonReaderException)
+            {
+                // 如果捕获到 JSON 解析异常（说明是 HTML 或其他格式），返回原始字符串
+                return responseText;
+            }
+            catch (Exception ex)
+            {
+                // 其他异常
+                return $"解析响应时发生错误: {ex.Message} \n原始内容: {responseText}";
+            }
         }
 
         private static string Md5Encrypt(string source)

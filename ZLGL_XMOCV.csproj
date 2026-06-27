@@ -138,6 +138,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="X5Config.cs" />
     <Compile Include="X5DataConverter.cs" />
     <Compile Include="X5Protocol.cs" />
     <EmbeddedResource Include="FrmZLGL_XMOCV.resx">

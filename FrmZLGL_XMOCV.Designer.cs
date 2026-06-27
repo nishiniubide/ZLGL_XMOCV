@@ -43,7 +43,7 @@
             this.lkpUpProject = new DevExpress.XtraEditors.LookUpEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
-            this.richBox = new System.Windows.Forms.RichTextBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.TabIQC = new DevExpress.XtraTab.XtraTabPage();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
@@ -219,7 +219,7 @@
             this.splitContainerControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerControl2.Location = new System.Drawing.Point(0, 0);
             this.splitContainerControl2.Name = "splitContainerControl2";
-            this.splitContainerControl2.Panel1.Controls.Add(this.richBox);
+            this.splitContainerControl2.Panel1.Controls.Add(this.richTextBox1);
             this.splitContainerControl2.Panel1.Text = "Panel1";
             this.splitContainerControl2.Panel2.Controls.Add(this.xtraTabControl1);
             this.splitContainerControl2.Panel2.Text = "Panel2";
@@ -228,16 +228,16 @@
             this.splitContainerControl2.TabIndex = 0;
             this.splitContainerControl2.Text = "splitContainerControl2";
             // 
-            // richBox
+            // richTextBox1
             // 
-            this.richBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richBox.Location = new System.Drawing.Point(0, 0);
-            this.richBox.Margin = new System.Windows.Forms.Padding(5);
-            this.richBox.Name = "richBox";
-            this.richBox.ReadOnly = true;
-            this.richBox.Size = new System.Drawing.Size(352, 726);
-            this.richBox.TabIndex = 1;
-            this.richBox.Text = "";
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(352, 726);
+            this.richTextBox1.TabIndex = 1;
+            this.richTextBox1.Text = "";
             // 
             // xtraTabControl1
             // 
@@ -465,7 +465,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraBars.BarButtonItem btnUpload;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl2;
-        private System.Windows.Forms.RichTextBox richBox;
+        private System.Windows.Forms.RichTextBox richTextBox1;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
         private DevExpress.XtraTab.XtraTabPage TabIQC;
         private DevExpress.XtraTab.XtraTabPage TabZC;
