@@ -124,6 +124,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataValidator.cs" />
     <Compile Include="entity\IpqcData.cs" />
     <Compile Include="entity\IqcData.cs" />
     <Compile Include="entity\OqcData.cs" />

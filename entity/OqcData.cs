@@ -38,8 +38,8 @@ namespace ZLGL_XMOCV.entity
         [JsonProperty("shipment_batch")]
         public string ShipmentBatch { get; set; }
 
-        [JsonProperty("site_name")]
-        public string SiteName { get; set; }
+        [JsonProperty("site")]
+        public string Site { get; set; }
 
         [JsonProperty("check_date")]
         public string CheckDate { get; set; }

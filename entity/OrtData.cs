@@ -4,15 +4,6 @@ namespace ZLGL_XMOCV.entity
 {
     public class OrtData
     {
-        [JsonProperty("request_time")]
-        public string RequestTime { get; set; }
-
-        [JsonProperty("factory_code")]
-        public string FactoryCode { get; set; }
-
-        [JsonProperty("businessline_id")]
-        public int BusinessLineId { get; set; }
-
         [JsonProperty("field_type")]
         public string FieldType { get; set; }
 
@@ -34,8 +25,8 @@ namespace ZLGL_XMOCV.entity
         [JsonProperty("test_item")]
         public string TestItem { get; set; }
 
-        [JsonProperty("test_date")]
-        public string TestDate { get; set; }
+        [JsonProperty("check_date")]
+        public string CheckDate { get; set; }
 
         [JsonProperty("input_qty")]
         public int InputQty { get; set; }

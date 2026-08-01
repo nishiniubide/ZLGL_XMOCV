@@ -19,10 +19,6 @@ namespace ZLGL_XMOCV
 
     public class X5RequestPackage
     {
-        public string FactoryCode { get; set; }      // 供应商代码
-        public int BusinessLineId { get; set; }      // 业务线，固定4
-        public int DataLines { get; set; }           // 数据条数（data数组长度）
-        public string PushTime { get; set; }         // 请求推送时间
         public string BodyJson { get; set; }         // data序列化后的JSON字符串
     }
 
@@ -36,6 +32,23 @@ namespace ZLGL_XMOCV
             var package = new X5RequestPackage();
 
             DataRow firstRow = dt.Rows[0];
+
+            // 1. 先提取外层公共参数
+            string factoryCode = "";
+            string pushTime = "";
+            int bizLine = 4;
+            int supplier_type = 0;
+
+            
+            factoryCode = SafeToStr(firstRow["供应商代码(必填)"]);
+            pushTime = SafeToStr(firstRow["请求推送的时间(必填)"]);
+            bizLine = SafeToInt32(firstRow["业务线(必填)"], 4);
+            
+
+            if (dimension == DataDimension.LL)
+            {
+                supplier_type = SafeToInt32(firstRow["供应商类型(必填)"], 1);
+            }
 
             // 根据维度转换 data 列表
             List<object> dataList;
@@ -63,13 +76,44 @@ namespace ZLGL_XMOCV
                     throw new ArgumentException("不支持的维度");
             }
 
-            var bodyObject = new { data = dataList };
-
-            package.BodyJson = JsonConvert.SerializeObject(bodyObject, new JsonSerializerSettings
+            // 3. 构建完整的请求体对象（包含外层参数和内层 data）
+            if (dimension == DataDimension.LL)
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                DateFormatString = "yyyy-MM-dd HH:mm:ss"
-            });
+                var fullBodyObject = new
+                {
+                    factory_code = factoryCode,
+                    supplier_type = supplier_type,
+                    businessline_id = bizLine,
+                    data_lines = dataList.Count,
+                    request_time = ConvertToDateTimeString(pushTime), // 确保时间格式正确
+                    data = dataList
+                };
+
+                // 4. 序列化完整的对象
+                package.BodyJson = JsonConvert.SerializeObject(fullBodyObject, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    DateFormatString = "yyyy-MM-dd HH:mm:ss"
+                });
+            }
+            else
+            {
+                var fullBodyObject = new
+                {
+                    factory_code = factoryCode,
+                    businessline_id = bizLine,
+                    data_lines = dataList.Count,
+                    request_time = ConvertToDateTimeString(pushTime), // 确保时间格式正确
+                    data = dataList
+                };
+
+                // 4. 序列化完整的对象
+                package.BodyJson = JsonConvert.SerializeObject(fullBodyObject, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    DateFormatString = "yyyy-MM-dd HH:mm:ss"
+                });
+            }
 
             return package;
         }
@@ -86,25 +130,8 @@ namespace ZLGL_XMOCV
             {
                 var firstRow = group.First();
 
-                string factoryCode = SafeToStr(firstRow["工厂编码(必填)"]);
-                if (string.IsNullOrEmpty(factoryCode) && dt.Rows.Count > 0)
-                    factoryCode = SafeToStr(dt.Rows[0]["工厂编码(必填)"]);
-
-                int bizLine = SafeToInt32(firstRow["业务线(必填)"], 4);
-                int supplierType = SafeToInt32(firstRow["供应商类型(必填)"]);
-
-                string pushTime = SafeToStr(firstRow["数据推送时间(必填)"]);
-                if (string.IsNullOrEmpty(pushTime) && dt.Rows.Count > 0)
-                    pushTime = SafeToStr(dt.Rows[0]["数据推送时间(必填)"]); // 修复了原来的笔误 "请数据推送时间"
-
                 var yield = new YieldData
                 {
-                    // ✅ 公共字段
-                    FactoryCode = factoryCode,
-                    BusinessLineId = bizLine,
-                    SupplierType = supplierType,
-                    PushTime = ConvertToDateTimeString(pushTime),
-
                     // ✅ 业务字段（全部使用安全转换）
                     KeyCode = SafeToStr(firstRow["接口主键(必填)"]),
                     CheckType = SafeToIntNullable(firstRow["检验方式"]),
@@ -142,24 +169,8 @@ namespace ZLGL_XMOCV
             var list = new List<ProcessData>();
             foreach (DataRow row in dt.Rows)
             {
-                // 为了防止合并单元格导致空值，如果当前行为空，公共字段尝试从第一行取
-                string factoryCode = SafeToStr(row["供应商代码(必填)"]);
-                if (string.IsNullOrEmpty(factoryCode) && dt.Rows.Count > 0)
-                    factoryCode = SafeToStr(dt.Rows[0]["供应商代码(必填)"]);
-
-                string pushTime = SafeToStr(row["请求推送的时间(必填)"]);
-                if (string.IsNullOrEmpty(pushTime) && dt.Rows.Count > 0)
-                    pushTime = SafeToStr(dt.Rows[0]["请求推送的时间(必填)"]);
-
-                int bizLine = SafeToInt32(row["业务线(必填)"], 4); // 默认给4
-
                 list.Add(new ProcessData
                 {
-                    // ✅ 公共字段
-                    RequestTime = ConvertToDateTimeString(pushTime),
-                    FactoryCode = factoryCode,
-                    BusinessLineId = bizLine,
-
                     // ✅ 业务字段（全部使用安全转换，避免 DBNull 或格式错误导致崩溃）
                     MaterialType = SafeToStr(row["物料类型(必填)"]),
                     SupplierModel = SafeToStr(row["供应商型号(必填)"]),
@@ -169,8 +180,8 @@ namespace ZLGL_XMOCV
                     LineId = SafeToStr(row["线体编号(必填)"]),
                     Sn = SafeToStr(row["SN码(必填)"]),
                     MachineName = SafeToStr(row["设备名称"]),
-                    KeyValue = SafeToStr(row["参数名(必填)"]),
-                    Value = SafeToStr(row["参数值(必填)"]),
+                    Parameter = SafeToStr(row["参数名(必填)"]),
+                    KeyValue = SafeToStr(row["参数值(必填)"]),
                     Unit = SafeToStr(row["单位"]),
                     UpperLevel = SafeToStr(row["上限"]),
                     FloorLevel = SafeToStr(row["下限"]),
@@ -180,7 +191,6 @@ namespace ZLGL_XMOCV
             }
             return list;
         }
-
 
         private static List<OqcData> ConvertToOqcDataList(DataTable dt)
         {
@@ -206,29 +216,14 @@ namespace ZLGL_XMOCV
             {
                 var firstRow = group.First();
 
-                string factoryCode = SafeToStr(firstRow["供应商代码(必填)"]);
-                if (string.IsNullOrEmpty(factoryCode) && dt.Rows.Count > 0)
-                    factoryCode = SafeToStr(dt.Rows[0]["供应商代码(必填)"]);
-
-                string pushTime = SafeToStr(firstRow["请求推送的时间(必填)"]);
-                if (string.IsNullOrEmpty(pushTime) && dt.Rows.Count > 0)
-                    pushTime = SafeToStr(dt.Rows[0]["请求推送的时间(必填)"]);
-
-                int bizLine = SafeToInt32(firstRow["业务线(必填)"], 4); // 默认给4
-
                 var OQC = new OqcData
                 {
-                    // ✅ 逐行设定公共字段
-                    RequestTime = ConvertToDateTimeString(pushTime),
-                    FactoryCode = factoryCode,
-                    BusinessLineId = bizLine,
-
                     ProductCode = SafeToStr(firstRow["物料代码(必填)"]),
                     FieldType = SafeToStr(firstRow["领域(必填)"]),
                     SupplierModel = SafeToStr(firstRow["供应商型号(必填)"]),
                     LineId = SafeToStr(firstRow["线体编号"]),
                     ShipmentBatch = SafeToStr(firstRow["出货批次(必填)"]),
-                    SiteName = SafeToStr(firstRow["工站(必填)"]),
+                    Site = SafeToStr(firstRow["工站(必填)"]),
                     CheckDate = ConvertToDateString(firstRow["检验日期(必填)"]),
                     ShipmentQty = SafeToInt32(firstRow["出货数量(必填)"]),
                     CheckBatchQty = SafeToInt32(firstRow["抽检批数(必填)"]),
@@ -260,24 +255,8 @@ namespace ZLGL_XMOCV
             var list = new List<OrtData>();
             foreach (DataRow row in dt.Rows)
             {
-                // 为了防止合并单元格导致空值，如果当前行为空，公共字段尝试从第一行取
-                string factoryCode = SafeToStr(row["供应商代码(必填)"]);
-                if (string.IsNullOrEmpty(factoryCode) && dt.Rows.Count > 0)
-                    factoryCode = SafeToStr(dt.Rows[0]["供应商代码(必填)"]);
-
-                string pushTime = SafeToStr(row["请求推送的时间(必填)"]);
-                if (string.IsNullOrEmpty(pushTime) && dt.Rows.Count > 0)
-                    pushTime = SafeToStr(dt.Rows[0]["请求推送的时间(必填)"]);
-
-                int bizLine = SafeToInt32(row["业务线(必填)"], 4); // 默认给4
-
                 list.Add(new OrtData
                 {
-                    // ✅ 公共字段
-                    RequestTime = ConvertToDateTimeString(pushTime),
-                    FactoryCode = factoryCode,
-                    BusinessLineId = bizLine,
-
                     // ✅ 业务字段（全部使用安全转换，避免DBNull或格式错误导致崩溃）
                     FieldType = SafeToStr(row["领域(必填)"]),
                     SupplierModel = SafeToStr(row["供应商型号(必填)"]),
@@ -286,13 +265,13 @@ namespace ZLGL_XMOCV
                     MonitoringMonth = SafeToStr(row["ORT监控截止月份(必填)"]),
                     ProductionDate = ConvertToDateString(row["样品生产时间(必填)"]),
                     TestItem = SafeToStr(row["测试项目(必填)"]),
-                    TestDate = ConvertToDateString(row["检验日期(必填)"]),
+                    CheckDate = ConvertToDateString(row["检验日期(必填)"]),
                     // SafeToInt32 自带提取数字和默认值机制，即使填了 "3个" 也能提取出 3
                     InputQty = SafeToInt32(row["投入数量(必填)"]),
                     OkQty = SafeToInt32(row["测试总通过数(必填)"]),
                     TestingQty = SafeToInt32(row["测试中数量(必填)"]),
                     NgQty = SafeToInt32(row["测试总NG数(必填)"]),
-                    ProgressDesc = SafeToStr(row["测试进度描述"]),
+                    //ProgressDesc = SafeToStr(row["测试进度描述"]), TODO:未找到应用
                     Result = SafeToInt32(row["结果判定:1PASS/2FAIL(必填)"])
                 });
             }
@@ -304,27 +283,11 @@ namespace ZLGL_XMOCV
             var list = new List<IqcData>();
             foreach (DataRow row in dt.Rows)
             {
-                // 为了防止合并单元格导致空值，如果当前行为空，公共字段尝试从第一行取
-                string factoryCode = SafeToStr(row["供应商代码(必填)"]);
-                if (string.IsNullOrEmpty(factoryCode) && dt.Rows.Count > 0)
-                    factoryCode = SafeToStr(dt.Rows[0]["供应商代码(必填)"]);
-
-                string pushTime = SafeToStr(row["请求推送的时间(必填)"]);
-                if (string.IsNullOrEmpty(pushTime) && dt.Rows.Count > 0)
-                    pushTime = SafeToStr(dt.Rows[0]["请求推送的时间(必填)"]);
-
-                int bizLine = SafeToInt32(row["业务线(必填)"], 4); // 默认给4
-
                 list.Add(new IqcData
                 {
-                    // ✅ 公共字段
-                    RequestTime = ConvertToDateTimeString(pushTime),
-                    FactoryCode = factoryCode,
-                    BusinessLineId = bizLine,
-
                     // ✅ 业务字段（全部使用安全转换，避免 DBNull 或格式错误导致崩溃）
                     InspectNo = SafeToStr(row["检验单号(必填)"]),
-                    MaterialType = SafeToStr(row["物料类型(必填)"]),
+                    FieldType = SafeToStr(row["物料类型(必填)"]),
                     SupplierModel = SafeToStr(row["供应商型号(必填)"]),
                     // 注意：根据Excel模板，这里的列名没有"(必填)"后缀
                     ProductCode = SafeToStr(row["物料代码"]),
@@ -334,20 +297,19 @@ namespace ZLGL_XMOCV
                     VendorName = SafeToStr(row["原材料供应商名称(必填)"]),
                     IncomingBatch = SafeToStr(row["来料批次(必填)"]),
                     DateCode = ConvertToDateString(row["原材料生产日期(必填)"]),
-                    ValidityPeriod = SafeToStr(row["有效期"]),
+                    ValidityPeriod = SafeToDoubleNullable(row["有效期"]),
                     InspectItem = SafeToStr(row["检验项(必填)"]),
                     InspectValue = SafeToStr(row["检测值(必填)"]),
                     Unit = SafeToStr(row["单位"]),
                     UpperLevel = SafeToStr(row["上限"]),
                     FloorLevel = SafeToStr(row["下限"]),
                     Result = SafeToStr(row["结果判定"]),
-                    DisposalMethod = SafeToStr(row["不良处理方式"]),
-                    InspectDate = ConvertToDateString(row["检验日期(必填)"])
+                    DealMethod = SafeToStr(row["不良处理方式"]),
+                    InspectTime = ConvertToDateString(row["检验日期(必填)"])
                 });
             }
             return list;
         }
-
 
         private static List<IpqcData> ConvertToIpqcDataList(DataTable dt)
         {
@@ -356,28 +318,12 @@ namespace ZLGL_XMOCV
             // 遍历每一行，逐行读取公共字段和业务字段
             foreach (DataRow row in dt.Rows)
             {
-                // 为了防止合并单元格导致空值，如果当前行为空，公共字段尝试从第一行取
-                string factoryCode = SafeToStr(row["供应商代码(必填)"]);
-                if (string.IsNullOrEmpty(factoryCode) && dt.Rows.Count > 0)
-                    factoryCode = SafeToStr(dt.Rows[0]["供应商代码(必填)"]);
-
-                string pushTime = SafeToStr(row["请求推送的时间(必填)"]);
-                if (string.IsNullOrEmpty(pushTime) && dt.Rows.Count > 0)
-                    pushTime = SafeToStr(dt.Rows[0]["请求推送的时间(必填)"]);
-
-                int bizLine = SafeToInt32(row["业务线(必填)"], 4); // 默认给4
-
                 var item = new IpqcData
                 {
-                    // ✅ 逐行设定公共字段
-                    RequestTime = ConvertToDateTimeString(pushTime),
-                    FactoryCode = factoryCode,
-                    BusinessLineId = bizLine,
-
                     // ✅ 逐行设定业务字段
                     InspectNo = SafeToStr(row["检验单号(必填)"]),
                     MaterialType = SafeToStr(row["物料类型(必填)"]),
-                    SupplierModel = SafeToStr(row["供应商型号(必填)"]),
+                    Model = SafeToStr(row["供应商型号(必填)"]),
                     ProductCode = SafeToStr(row["物料代码(必填)"]),
                     ProductBatch = SafeToStr(row["产品批次(必填)"]),
                     Process = SafeToStr(row["制程(必填)"]),
@@ -455,9 +401,9 @@ namespace ZLGL_XMOCV
             return s;
         }
 
-        private static string SafeToStr(object value)
+        private static string SafeToStr(object value, string defaultValue = "")
         {
-            if (value == null || value == DBNull.Value) return "";
+            if (value == null || value == DBNull.Value) return defaultValue;
             return value.ToString().Trim();
         }
 
@@ -518,6 +464,17 @@ namespace ZLGL_XMOCV
             if (string.IsNullOrEmpty(s)) return null;
             if (int.TryParse(s, out int result)) return result;
             if (double.TryParse(s, out double d)) return (int)d;
+            return null;
+        }
+
+        private static double? SafeToDoubleNullable(object value)
+        {
+            if (value == null || value == DBNull.Value) return null;
+            string s = value.ToString().Trim();
+            if (string.IsNullOrEmpty(s)) return null;
+            if (double.TryParse(s, System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.InvariantCulture, out double result))
+                return result;
             return null;
         }
 

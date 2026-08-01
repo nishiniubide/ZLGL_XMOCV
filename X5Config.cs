@@ -54,6 +54,29 @@ namespace ZLGL_XMOCV
             };
 
         /// <summary>
+        /// 测试环境接口地址映射
+        /// 根据PDF要求配置测试地址
+        /// </summary>
+        private static readonly Dictionary<DataDimension, string> TestInterfaceUrls = new Dictionary<DataDimension, string>
+        {
+            // OEM_251: IQC 测试地址
+            { DataDimension.IQC, "http://report.scms.test.b2c.srv/qms/x5/material/quality/iqc" }
+            // 注意：PDF仅提供了IQC的测试地址，其他维度如需测试请在此补充
+        };
+
+        /// <summary>
+        /// 获取测试环境的接口URL
+        /// </summary>
+        public static string GetUrlTest(DataDimension dimension)
+        {
+            if (TestInterfaceUrls.TryGetValue(dimension, out string url))
+            {
+                return url;
+            }
+            throw new ArgumentException($"未配置维度 {dimension} 对应的测试地址", nameof(dimension));
+        }
+
+        /// <summary>
         /// 根据维度获取对应接口的完整 URL。
         /// </summary>
         public static string GetUrl(DataDimension dimension)
@@ -64,6 +87,21 @@ namespace ZLGL_XMOCV
             }
                 
             return string.Format(BaseUrl, iface);
+        }
+
+        /// <summary>
+        /// 获取测试环境的配置项
+        /// </summary>
+        public static X5ConfigItem GetConfigTest(DataDimension dimension)
+        {
+            return new X5ConfigItem
+            {
+                UserName = UserName,
+                Password = Password,
+                AppId = AppId,
+                AppKey = AppKey,
+                Url = GetUrlTest(dimension),
+            };
         }
 
         /// <summary>

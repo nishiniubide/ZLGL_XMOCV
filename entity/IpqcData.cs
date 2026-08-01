@@ -4,23 +4,14 @@ namespace ZLGL_XMOCV.entity
 {
     public class IpqcData
     {
-        [JsonProperty("request_time")]
-        public string RequestTime { get; set; }
-
-        [JsonProperty("factory_code")]
-        public string FactoryCode { get; set; }
-
-        [JsonProperty("businessline_id")]
-        public int BusinessLineId { get; set; }
-
         [JsonProperty("inspect_no")]
         public string InspectNo { get; set; }
 
         [JsonProperty("material_type")]
         public string MaterialType { get; set; }
 
-        [JsonProperty("supplier_model")]
-        public string SupplierModel { get; set; }
+        [JsonProperty("model")]
+        public string Model { get; set; }
 
         [JsonProperty("product_code")]
         public string ProductCode { get; set; }

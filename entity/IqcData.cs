@@ -1,23 +1,13 @@
 ﻿using Newtonsoft.Json;
-
 namespace ZLGL_XMOCV.entity
 {
     public class IqcData
     {
-        [JsonProperty("request_time")]
-        public string RequestTime { get; set; }
-
-        [JsonProperty("factory_code")]
-        public string FactoryCode { get; set; }
-
-        [JsonProperty("businessline_id")]
-        public int BusinessLineId { get; set; }
-
         [JsonProperty("inspect_no")]
         public string InspectNo { get; set; }
 
-        [JsonProperty("material_type")]
-        public string MaterialType { get; set; }
+        [JsonProperty("field_type")]
+        public string FieldType { get; set; }
 
         [JsonProperty("supplier_model")]
         public string SupplierModel { get; set; }
@@ -44,7 +34,7 @@ namespace ZLGL_XMOCV.entity
         public string DateCode { get; set; }
 
         [JsonProperty("validity_period")]
-        public string ValidityPeriod { get; set; }
+        public double? ValidityPeriod { get; set; }
 
         [JsonProperty("inspect_item")]
         public string InspectItem { get; set; }
@@ -64,10 +54,10 @@ namespace ZLGL_XMOCV.entity
         [JsonProperty("result")]
         public string Result { get; set; }
 
-        [JsonProperty("disposal_method")]
-        public string DisposalMethod { get; set; }
+        [JsonProperty("deal_method")]
+        public string DealMethod { get; set; }
 
-        [JsonProperty("inspect_date")]
-        public string InspectDate { get; set; }
+        [JsonProperty("inspect_time")]
+        public string InspectTime { get; set; }
     }
 }

@@ -5,21 +5,6 @@ namespace ZLGL_XMOCV.entity
 {
     public class YieldData
     {
-        [JsonProperty("factory_code")]
-        public string FactoryCode { get; set; }
-
-        [JsonProperty("businessline_id")]
-        public int BusinessLineId { get; set; }
-
-        [JsonProperty("supplier_type")]
-        public int SupplierType { get; set; }
-
-        [JsonProperty("push_time")]
-        public string PushTime { get; set; }
-
-        [JsonProperty("data_lines")]
-        public int DataLines { get; set; }
-
         [JsonProperty("key_code")]
         public string KeyCode { get; set; }
 

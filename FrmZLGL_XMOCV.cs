@@ -26,6 +26,36 @@ namespace ZLGL_XMOCV
         public FrmZLGL_XMOCV()
         {
             InitializeComponent();
+
+            gridView1.OptionsBehavior.Editable = false;
+            gridView1.OptionsView.ShowIndicator = false;
+            gridView1.OptionsView.ColumnAutoWidth = false;
+            gridView1.BestFitColumns();
+
+            gridView2.BestFitColumns();
+            gridView2.OptionsBehavior.Editable = false;
+            gridView2.OptionsView.ShowIndicator = false;
+            gridView2.OptionsView.ColumnAutoWidth = false;
+
+            gridView3.OptionsBehavior.Editable = false;
+            gridView3.OptionsView.ShowIndicator = false;
+            gridView3.OptionsView.ColumnAutoWidth = false;
+            gridView3.BestFitColumns();
+
+            gridView4.OptionsBehavior.Editable = false;
+            gridView4.OptionsView.ShowIndicator = false;
+            gridView4.OptionsView.ColumnAutoWidth = false;
+            gridView4.BestFitColumns();
+
+            gridView5.OptionsBehavior.Editable = false;
+            gridView5.OptionsView.ShowIndicator = false;
+            gridView5.OptionsView.ColumnAutoWidth = false;
+            gridView5.BestFitColumns();
+
+            gridView6.OptionsBehavior.Editable = false;
+            gridView6.OptionsView.ShowIndicator = false;
+            gridView6.OptionsView.ColumnAutoWidth = false;
+            gridView6.BestFitColumns();
         }
 
         private void FrmZLGL_XMOCV_Load(object sender, EventArgs e)
@@ -39,6 +69,9 @@ namespace ZLGL_XMOCV
             {
                 return;
             }
+
+            importedData = null;
+
             string tabName = "Tab" + lkpUpProject.EditValue.ToString();
             var xtraTabControl = FindControl<DevExpress.XtraTab.XtraTabControl>(this);
             if (xtraTabControl != null)
@@ -47,7 +80,21 @@ namespace ZLGL_XMOCV
                 if (page != null)
                 {
                     xtraTabControl.SelectedTabPage = page;
-                    BindDataToCurrentGrid(page);
+
+                    // 清空 DevExpress GridControl
+                    var gridControl = FindControl<DevExpress.XtraGrid.GridControl>(page);
+                    if (gridControl != null)
+                    {
+                        gridControl.DataSource = null;
+                        (gridControl.MainView as DevExpress.XtraGrid.Views.Grid.GridView)?.Columns.Clear();
+                    }
+
+                    // 清空原生 DataGridView (如果界面上有混用)
+                    var dgv = FindControl<DataGridView>(page);
+                    if (dgv != null)
+                    {
+                        dgv.DataSource = null;
+                    }
                 }
                 return;
             }
@@ -306,9 +353,31 @@ namespace ZLGL_XMOCV
                     }
 
                     importedData = ReadExcelWithNPOI(ofd.FileName, null, importDimension);
-                    Control activePage = GetCurrentActiveTabPage();
-                    BindDataToCurrentGrid(activePage);
-                    Msg.ShowInformation($"导入成功，共 {importedData.Rows.Count} 行数据");
+
+                    // 执行数据校验
+                    List<string> errors = DataValidator.Validate(importedData, importDimension);
+
+                    if (errors.Count > 0)
+                    {
+                        // 校验失败：在 RichTextBox 显示红色错误信息
+                        // 显示前10条错误，避免界面卡顿
+                        string errorMsg = $"数据校验失败，共 {errors.Count} 处错误：" + Environment.NewLine;
+                        foreach (string err in errors.Take(10))
+                        {
+                            errorMsg += err + Environment.NewLine;
+                        }
+                        if (errors.Count > 10) errorMsg += "..." + Environment.NewLine;
+
+                        ShowMessage(errorMsg, false);
+                        Msg.ShowError("导入数据存在校验错误，请查看界面下方日志！");
+                    }
+                    else
+                    {
+                        // 校验成功：绑定数据并显示蓝色成功信息
+                        Control activePage = GetCurrentActiveTabPage();
+                        BindDataToCurrentGrid(activePage);
+                        ShowMessage($"导入成功，共 {importedData.Rows.Count} 行数据，且数据校验通过。", true);
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -4,15 +4,6 @@ namespace ZLGL_XMOCV.entity
 {
     public class ProcessData
     {
-        [JsonProperty("request_time")]
-        public string RequestTime { get; set; }
-
-        [JsonProperty("factory_code")]
-        public string FactoryCode { get; set; }
-
-        [JsonProperty("businessline_id")]
-        public int BusinessLineId { get; set; }
-
         [JsonProperty("material_type")]
         public string MaterialType { get; set; }
 
@@ -34,14 +25,17 @@ namespace ZLGL_XMOCV.entity
         [JsonProperty("sn")]
         public string Sn { get; set; }
 
+        [JsonProperty("parameter")]
+        public string Parameter { get; set; }
+
+        [JsonProperty("machine_id")]
+        public string MachineId { get; set; }
+
         [JsonProperty("machine_name")]
         public string MachineName { get; set; }
 
         [JsonProperty("key_value")]
         public string KeyValue { get; set; }
-
-        [JsonProperty("value")]
-        public string Value { get; set; }
 
         [JsonProperty("unit")]
         public string Unit { get; set; }
