@@ -124,13 +124,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataValidator.cs" />
+    <!-- 接口层 -->
+    <Compile Include="Api\IX5Client.cs" />
+    <Compile Include="Api\X5ClientImpl.cs" />
+    <!-- 配置层 -->
+    <Compile Include="Config\X5ApiConfig.cs" />
+    <Compile Include="Config\CredentialProvider.cs" />
+    <!-- Excel 读取层 -->
+    <Compile Include="Excel\IExcelReader.cs" />
+    <Compile Include="Excel\NpoiExcelReader.cs" />
+    <Compile Include="Excel\DataUploadService.cs" />
+    <!-- 校验层 -->
+    <Compile Include="Validation\IDataValidator.cs" />
+    <Compile Include="Validation\IqcValidator.cs" />
+    <Compile Include="Validation\ValidatorFactory.cs" />
+    <!-- 转换层 -->
+    <Compile Include="Converter\IDataConverter.cs" />
+    <Compile Include="Converter\DataConverterBase.cs" />
+    <Compile Include="Converter\ConverterFactory.cs" />
+    <Compile Include="Converter\YieldConverter.cs" />
+    <Compile Include="Converter\OqcConverter.cs" />
+    <Compile Include="Converter\OrtConverter.cs" />
+    <Compile Include="Converter\IqcConverter.cs" />
+    <Compile Include="Converter\IpqcConverter.cs" />
+    <Compile Include="Converter\ProcessConverter.cs" />
+    <!-- 实体层 -->
     <Compile Include="entity\IpqcData.cs" />
     <Compile Include="entity\IqcData.cs" />
     <Compile Include="entity\OqcData.cs" />
     <Compile Include="entity\OrtData.cs" />
     <Compile Include="entity\ProcessData.cs" />
     <Compile Include="entity\YieldData.cs" />
+    <!-- 窗体 -->
     <Compile Include="FrmZLGL_XMOCV.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,9 +164,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="X5Config.cs" />
-    <Compile Include="X5DataConverter.cs" />
-    <Compile Include="X5Protocol.cs" />
     <EmbeddedResource Include="FrmZLGL_XMOCV.resx">
       <DependentUpon>FrmZLGL_XMOCV.cs</DependentUpon>
     </EmbeddedResource>
