@@ -4,6 +4,7 @@ using System.Data;
 using ZLGL_XMOCV.Api;
 using ZLGL_XMOCV.Config;
 using ZLGL_XMOCV.Converter;
+
 using ZLGL_XMOCV.Validation;
 
 namespace ZLGL_XMOCV.Excel
@@ -70,7 +71,7 @@ namespace ZLGL_XMOCV.Excel
                 }
 
                 // 获取配置
-                var config = CredentialProvider.GetConfig(dimension);
+                var config = CredentialProvider.GetConfigTest(dimension);
 
                 // 校验配置完整性
                 if (string.IsNullOrEmpty(config.UserName) || string.IsNullOrEmpty(config.Password) ||

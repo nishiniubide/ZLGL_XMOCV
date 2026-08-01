@@ -131,6 +131,7 @@
     <Compile Include="Config\X5ApiConfig.cs" />
     <Compile Include="Config\CredentialProvider.cs" />
     <!-- Excel 读取层 -->
+    <Compile Include="DataDimension.cs" />
     <Compile Include="Excel\IExcelReader.cs" />
     <Compile Include="Excel\NpoiExcelReader.cs" />
     <Compile Include="Excel\DataUploadService.cs" />

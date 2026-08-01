@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ZLGL_XMOCV.Api;
+
 using ZLGL_XMOCV.Excel;
 
 namespace ZLGL_XMOCV
@@ -23,7 +24,7 @@ namespace ZLGL_XMOCV
         {
             InitializeComponent();
 
-            // 注入依赖（后续可改为 IoC 容器）
+            // 注入依赖
             _uploadService = new DataUploadService(new NpoiExcelReader(), new X5ClientImpl());
 
             InitGridViews();
@@ -104,6 +105,12 @@ namespace ZLGL_XMOCV
             {
                 DataDimension importDimension = ResolveCurrentDimension();
 
+                if (importDimension.ToString() == "UNKNOWN")
+                {
+                    MessageBox.Show("无法识别的维度，请检查选择的项目。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 // 调用服务层：读取 + 校验
                 var result = _uploadService.ImportAndValidate(ofd.FileName, importDimension);
 
@@ -183,7 +190,7 @@ namespace ZLGL_XMOCV
             if (editVal is int intVal) return (DataDimension)intVal;
             if (editVal != null && Enum.TryParse(editVal.ToString(), out DataDimension parsed)) return parsed;
 
-            return DataDimension.LL; // 默认值
+            return DataDimension.UNKNOWN; // 默认值
         }
 
         private Control GetCurrentActiveTabPage()
